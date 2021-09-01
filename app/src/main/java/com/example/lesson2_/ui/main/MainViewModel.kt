@@ -16,7 +16,7 @@ class MainViewModel : ViewModel() {
 
         return liveDataToObserve // кастинг
     }
-
+//
     private fun getDataFromLocalSource (){
         Thread{
             Thread.sleep(5000)
