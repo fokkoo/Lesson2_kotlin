@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import com.example.lesson2_.R
+import com.example.lesson2_.databinding.MainFragmentBinding
 
 class MainFragment : Fragment() {
 
@@ -18,11 +19,18 @@ class MainFragment : Fragment() {
 
     private lateinit var viewModel: MainViewModel
 
+    private  var _binding: MainFragmentBinding? = null// создание объекта байндинг
+    private val binding get()= _binding!! // создание объекта байндинг
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.main_fragment, container, false)
+        val view = inflater.inflate(R.layout.main_fragment,container,false)
+
+        _binding = MainFragmentBinding.bind(view) // инициализация байдинга
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -38,9 +46,14 @@ class MainFragment : Fragment() {
     }
 
     private fun renderData(data: String?) {
-        view?.findViewById<TextView>(R.id.message)?.text =data;
+
+        binding.message.text = data // замена на приведение к текстВью и поиск по айди
+      //  view?.findViewById<TextView>(R.id.message)?.text =data;
     }
 
 
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null // не соберется фрагмент , из за потери данных, из за сылок на элементы  тк фрагмент живет без отображения
+    }
 }
