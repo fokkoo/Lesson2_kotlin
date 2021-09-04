@@ -12,6 +12,7 @@ class MainViewModel : ViewModel() {
 
     val liveData: LiveData <AppState> = liveDataToObserve // лайвдата следящая за состоянием объекта
 
+    fun getWeather() = getDataFromLocalSource()
 
     /*
     fun getData(): LiveData<String> {
@@ -20,17 +21,16 @@ class MainViewModel : ViewModel() {
 
         return liveDataToObserve // кастинг
     }
-    
+
      */
 
     private fun getDataFromLocalSource (){
+        liveDataToObserve.value = AppState.Loading// как только дернули то первым начинаем загрузку
+
         Thread{
             Thread.sleep(5000)
-            liveDataToObserve.postValue("данные 1")
-            Thread.sleep(5000)
-            liveDataToObserve.postValue("данные 2")
-            Thread.sleep(5000)
-            liveDataToObserve.postValue("данные 3")
+            liveDataToObserve.postValue(AppState.Success("nice weather"))
+
 
         }.start()
     }
