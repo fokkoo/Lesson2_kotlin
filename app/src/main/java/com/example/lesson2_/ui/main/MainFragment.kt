@@ -49,6 +49,11 @@ class MainFragment : Fragment() {
 
         binding.message.text = data // замена на приведение к текстВью и поиск по айди
       //  view?.findViewById<TextView>(R.id.message)?.text =data;
+
+
+        binding.button.setOnClickListener {
+            viewModel.getData()
+        }
     }
 
 

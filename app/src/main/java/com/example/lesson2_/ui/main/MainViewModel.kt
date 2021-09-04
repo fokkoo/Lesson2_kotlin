@@ -6,16 +6,22 @@ import androidx.lifecycle.ViewModel
 
 class MainViewModel : ViewModel() {
 
-    private  val liveDataToObserve: MutableLiveData<String> = MutableLiveData()
+    private  val liveDataToObserve: MutableLiveData<AppState> = MutableLiveData()
 
     // Mutable значит можно положить туда данные postvalue setvalue view моделей, для активити не мутебл
 
+    val liveData: LiveData <AppState> = liveDataToObserve // лайвдата следящая за состоянием объекта
+
+
+    /*
     fun getData(): LiveData<String> {
 
         getDataFromLocalSource()
 
         return liveDataToObserve // кастинг
     }
+    
+     */
 
     private fun getDataFromLocalSource (){
         Thread{
