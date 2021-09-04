@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.lifecycle.Observer
 import com.example.lesson2_.R
 import com.example.lesson2_.databinding.MainFragmentBinding
+import com.google.android.material.snackbar.Snackbar
 
 class MainFragment : Fragment() {
 
@@ -41,19 +42,38 @@ class MainFragment : Fragment() {
 
 // при изменении liveData будет изменяться этот метод
 // подписались на данные data: String
-        viewModel.getData().observe(viewLifecycleOwner){ data : String -> renderData(data) }
+        viewModel.liveData.observe(viewLifecycleOwner){ state ->
+             renderData(state) }
         // кладем дату в текст по подписке
+
+        viewModel.getWeather() // вызываем в нужный момент getWeather после подписки
     }
 
-    private fun renderData(data: String?) {
+    private fun renderData(state: AppState) {
 
-        binding.message.text = data // замена на приведение к текстВью и поиск по айди
+        when (state){
+            is AppState.Loading->binding.loadingLayout.visibility = View.VISIBLE
+            is AppState.Success-> {binding.loadingLayout.visibility = View.GONE
+
+                 binding.message.text = state.weather
+            }
+            is AppState.Error ->{
+                binding.loadingLayout.visibility = View.GONE
+                Snackbar
+                    .make(binding.mainView,"Error",Snackbar.LENGTH_INDEFINITE)
+                    .setAction("reload"){viewModel.getWeather()}
+                    .show()
+
+            }
+        }
+
+      //  binding.message.text = data // замена на приведение к текстВью и поиск по айди
       //  view?.findViewById<TextView>(R.id.message)?.text =data;
 
-
+/*
         binding.button.setOnClickListener {
             viewModel.getData()
-        }
+        }*/
     }
 
 
