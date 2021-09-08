@@ -1,4 +1,4 @@
-package com.example.lesson2_.ui.main
+package com.example.lesson2_.ui.main.model
 
 sealed class AppState {
     // силд класс интерфейс апстейт с тремя состояниями и параметрами у класса ограниченное количество наследников

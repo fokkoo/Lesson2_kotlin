@@ -1,4 +1,4 @@
-package com.example.lesson2_.ui.main
+package com.example.lesson2_.ui.main.model
 
 data class City(
     val name: String,

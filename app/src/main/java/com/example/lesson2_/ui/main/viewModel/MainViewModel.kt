@@ -1,8 +1,11 @@
-package com.example.lesson2_.ui.main
+package com.example.lesson2_.ui.main.viewModel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.lesson2_.ui.main.model.AppState
+import com.example.lesson2_.ui.main.model.Repository
+import com.example.lesson2_.ui.main.model.RepositoryImpl
 
 class MainViewModel : ViewModel() {
 

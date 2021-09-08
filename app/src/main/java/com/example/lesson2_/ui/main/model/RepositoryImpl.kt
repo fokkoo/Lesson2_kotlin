@@ -1,4 +1,4 @@
-package com.example.lesson2_.ui.main
+package com.example.lesson2_.ui.main.model
 
 class RepositoryImpl : Repository {
     override fun getWetherFromServer(): Weather = Weather()

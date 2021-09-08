@@ -1,4 +1,4 @@
-package com.example.lesson2_.ui.main
+package com.example.lesson2_.ui.main.model
 
 data class Weather (
     val city: City = getDefaultCity(),
