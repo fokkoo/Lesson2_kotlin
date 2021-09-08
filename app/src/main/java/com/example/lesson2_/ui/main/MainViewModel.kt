@@ -6,13 +6,18 @@ import androidx.lifecycle.ViewModel
 
 class MainViewModel : ViewModel() {
 
+
+
     private  val liveDataToObserve: MutableLiveData<AppState> = MutableLiveData()
+
+    private  val repository: Repository = RepositoryImpl()
 
     // Mutable значит можно положить туда данные postvalue setvalue view моделей, для активити не мутебл
 
     val liveData: LiveData <AppState> = liveDataToObserve // лайвдата следящая за состоянием объекта
 
-    fun getWeather() = getDataFromLocalSource()
+    fun getWeatherFromLocalSource() = getDataFromLocalSource()
+    fun getWeatherFromRemoteSource() = getDataFromLocalSource()
 
     /*
     fun getData(): LiveData<String> {
@@ -29,7 +34,7 @@ class MainViewModel : ViewModel() {
 
         Thread{
             Thread.sleep(5000)
-            liveDataToObserve.postValue(AppState.Success("nice weather"))
+            liveDataToObserve.postValue(AppState.Success(repository.getWetherFromLocalStorage()))
 
 
         }.start()

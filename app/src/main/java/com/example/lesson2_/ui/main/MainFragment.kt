@@ -46,7 +46,7 @@ class MainFragment : Fragment() {
              renderData(state) }
         // кладем дату в текст по подписке
 
-        viewModel.getWeather() // вызываем в нужный момент getWeather после подписки
+        viewModel.getWeatherFromLocalSource() // вызываем в нужный момент getWeather после подписки
     }
 
     private fun renderData(state: AppState) {
@@ -55,13 +55,13 @@ class MainFragment : Fragment() {
             is AppState.Loading->binding.loadingLayout.visibility = View.VISIBLE
             is AppState.Success-> {binding.loadingLayout.visibility = View.GONE
 
-                 binding.message.text = state.weather
+                 binding.message.text = "${state.weather.city.name}+ ${state.weather.city.lat}+${state.weather.city.lon}+${state.weather.temperature}"
             }
             is AppState.Error ->{
                 binding.loadingLayout.visibility = View.GONE
                 Snackbar
                     .make(binding.mainView,"Error",Snackbar.LENGTH_INDEFINITE)
-                    .setAction("reload"){viewModel.getWeather()}
+                    .setAction("reload"){viewModel.getWeatherFromLocalSource()}
                     .show()
 
             }
