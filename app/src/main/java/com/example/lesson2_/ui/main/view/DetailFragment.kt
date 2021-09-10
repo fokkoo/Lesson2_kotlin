@@ -46,7 +46,7 @@ class DetailFragment : Fragment() {
              renderData(state) }
         // кладем дату в текст по подписке
 
-        viewModel.getWeatherFromLocalSource() // вызываем в нужный момент getWeather после подписки
+      //  viewModel.getWeatherFromLocalSource() // вызываем в нужный момент getWeather после подписки
     }
 
     private fun renderData(state: AppState) {
@@ -59,11 +59,11 @@ class DetailFragment : Fragment() {
             }
             is AppState.Error ->{
                 binding.loadingLayout.visibility = View.GONE
-                Snackbar
+            /*    Snackbar
                     .make(binding.mainFragmentFAB,"Error",Snackbar.LENGTH_INDEFINITE)
                     .setAction("reload"){viewModel.getWeatherFromLocalSource()}
                     .show()
-
+*/
             }
         }
 

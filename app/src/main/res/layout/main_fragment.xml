@@ -12,7 +12,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="16dp"
     android:layout_gravity="bottom"
-    android:src="@drawable/ic_baseline_flag_24"
+    android:src="@drawable/ic_russian"
     app:maxImageSize="56dp"
     >
 

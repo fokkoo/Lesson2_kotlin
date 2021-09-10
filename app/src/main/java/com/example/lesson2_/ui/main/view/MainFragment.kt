@@ -24,6 +24,7 @@ class MainFragment : Fragment() {
     private val binding get() = _binding!! // создание объекта байндинг
 
     private lateinit var adapter: MainAdapter
+    private var isRus: Boolean = true
 
 
     override fun onCreateView(
@@ -43,6 +44,18 @@ class MainFragment : Fragment() {
 
         adapter = MainAdapter()
         binding.recyclerView.adapter = adapter
+        binding.mainFragmentFAB.setOnClickListener {
+            isRus = ! isRus // меняем метку флага
+            if (isRus){
+                //перезапрашиваем данные
+
+                binding.mainFragmentFAB.setImageResource(R.drawable.ic_russian)
+            }else{
+                binding.mainFragmentFAB.setImageResource(R.drawable.ic_world)
+            }
+            viewModel.getWeatherFromLocalSource(isRus)
+        }
+
 
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java) // получение типа класса
 
@@ -54,7 +67,7 @@ class MainFragment : Fragment() {
         }
         // кладем дату в текст по подписке
 
-        viewModel.getWeatherFromLocalSource() // вызываем в нужный момент getWeather после подписки
+        viewModel.getWeatherFromLocalSource(isRus) // вызываем в нужный момент getWeather после подписки
     }
 
     private fun renderData(state: AppState) {
@@ -70,7 +83,7 @@ class MainFragment : Fragment() {
                 binding.loadingLayout.visibility = View.GONE
                 Snackbar
                      .make(binding.mainFragmentFAB,"Error",Snackbar.LENGTH_INDEFINITE)
-                     .setAction("reload"){viewModel.getWeatherFromLocalSource()}
+                     .setAction("reload"){viewModel.getWeatherFromLocalSource(isRus)}
                      .show()
 
             }
