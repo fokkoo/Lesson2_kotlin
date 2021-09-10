@@ -20,19 +20,20 @@ class MainFragment : Fragment() {
 
     private lateinit var viewModel: MainViewModel
 
-    private  var _binding: MainFragmentBinding? = null// создание объекта байндинг
-    private val binding get()= _binding!! // создание объекта байндинг
+    private var _binding: MainFragmentBinding? = null// создание объекта байндинг
+    private val binding get() = _binding!! // создание объекта байндинг
 
-
+    private lateinit var adapter: MainAdapter
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val view = inflater.inflate(R.layout.main_fragment,container,false)
+        val view = inflater.inflate(R.layout.main_fragment, container, false)
 
         _binding = MainFragmentBinding.bind(view) // инициализация байдинга
+
 
         return binding.root
     }
@@ -40,13 +41,17 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        adapter = MainAdapter()
+        binding.recyclerView.adapter = adapter
+
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java) // получение типа класса
 
 
 // при изменении liveData будет изменяться этот метод
 // подписались на данные data: String
-        viewModel.liveData.observe(viewLifecycleOwner){ state ->
-             renderData(state) }
+        viewModel.liveData.observe(viewLifecycleOwner) { state ->
+            renderData(state)
+        }
         // кладем дату в текст по подписке
 
         viewModel.getWeatherFromLocalSource() // вызываем в нужный момент getWeather после подписки
@@ -54,24 +59,25 @@ class MainFragment : Fragment() {
 
     private fun renderData(state: AppState) {
 
-        when (state){
-            is AppState.Loading->binding.loadingLayout.visibility = View.VISIBLE
-            is AppState.Success-> {binding.loadingLayout.visibility = View.GONE
+        when (state) {
+            is AppState.Loading -> binding.loadingLayout.visibility = View.VISIBLE
+            is AppState.Success -> {
+                binding.loadingLayout.visibility = View.GONE
+                adapter.weatherData = state.weather
 
-                 binding.message.text = "${state.weather.city.name}+ ${state.weather.city.lat}+${state.weather.city.lon}+${state.weather.temperature}"
             }
-            is AppState.Error ->{
+            is AppState.Error -> {
                 binding.loadingLayout.visibility = View.GONE
                 Snackbar
-                    .make(binding.mainView,"Error",Snackbar.LENGTH_INDEFINITE)
-                    .setAction("reload"){viewModel.getWeatherFromLocalSource()}
-                    .show()
+                     .make(binding.mainFragmentFAB,"Error",Snackbar.LENGTH_INDEFINITE)
+                     .setAction("reload"){viewModel.getWeatherFromLocalSource()}
+                     .show()
 
             }
         }
 
-      //  binding.message.text = data // замена на приведение к текстВью и поиск по айди
-      //  view?.findViewById<TextView>(R.id.message)?.text =data;
+        //  binding.message.text = data // замена на приведение к текстВью и поиск по айди
+        //  view?.findViewById<TextView>(R.id.message)?.text =data;
 
 /*
         binding.button.setOnClickListener {
@@ -82,6 +88,7 @@ class MainFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null // не соберется фрагмент , из за потери данных, из за сылок на элементы  тк фрагмент живет без отображения
+        _binding =
+            null // не соберется фрагмент , из за потери данных, из за сылок на элементы  тк фрагмент живет без отображения
     }
 }

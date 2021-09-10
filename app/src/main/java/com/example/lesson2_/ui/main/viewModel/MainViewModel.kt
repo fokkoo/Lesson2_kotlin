@@ -18,8 +18,8 @@ class MainViewModel : ViewModel() {
 
     val liveData: LiveData<AppState> = liveDataToObserve // лайвдата следящая за состоянием объекта
 
-  //  fun getWeatherFromLocalSource() = getDataFromLocalSource()
-  //  fun getWeatherFromRemoteSource() = getDataFromLocalSource()
+    fun getWeatherFromLocalSource() = getDataFromLocalSource()
+    fun getWeatherFromRemoteSource() = getDataFromLocalSource()
 
     /*
     fun getData(): LiveData<String> {

@@ -55,12 +55,12 @@ class DetailFragment : Fragment() {
             is AppState.Loading->binding.loadingLayout.visibility = View.VISIBLE
             is AppState.Success-> {binding.loadingLayout.visibility = View.GONE
 
-                 binding.message.text = "${state.weather.city.name}+ ${state.weather.city.lat}+${state.weather.city.lon}+${state.weather.temperature}"
+               //  binding.message.text = "${state.weather.city.name}+ ${state.weather.city.lat}+${state.weather.city.lon}+${state.weather.temperature}"
             }
             is AppState.Error ->{
                 binding.loadingLayout.visibility = View.GONE
                 Snackbar
-                    .make(binding.mainView,"Error",Snackbar.LENGTH_INDEFINITE)
+                    .make(binding.mainFragmentFAB,"Error",Snackbar.LENGTH_INDEFINITE)
                     .setAction("reload"){viewModel.getWeatherFromLocalSource()}
                     .show()
 
