@@ -12,19 +12,16 @@ import com.example.lesson2_.ui.main.viewModel.MainViewModel
 import com.example.lesson2_.ui.main.model.AppState
 import com.google.android.material.snackbar.Snackbar
 
-class MainFragment : Fragment() {
+class DetailFragment : Fragment() {
 
     companion object {
-        fun newInstance() = MainFragment()
+        fun newInstance() = DetailFragment()
     }
 
     private lateinit var viewModel: MainViewModel
 
     private  var _binding: MainFragmentBinding? = null// создание объекта байндинг
     private val binding get()= _binding!! // создание объекта байндинг
-
-
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
