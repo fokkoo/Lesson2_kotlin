@@ -19,7 +19,13 @@ class DetailFragment : Fragment() {
     companion object {
         const val WEAHTER_EXTRA = "WEAHTER_EXTRA"
 
-        fun newInstance() = DetailFragment()
+
+        // фабричный метод
+        fun newInstance(bundle: Bundle) : DetailFragment {
+            val fragment = DetailFragment()
+            fragment.arguments = bundle
+            return fragment
+        }
     }
 
 
@@ -45,7 +51,12 @@ class DetailFragment : Fragment() {
 
         val weather = arguments?.getParcelable<Weather>(WEAHTER_EXTRA)
 
-        if (weather != null){}
+        if (weather != null){
+
+            binding.message.text = "${weather.city.name}+ ${weather.city.lat}+${weather.city.lon}+${weather.temperature}"
+
+        }
+
 
  //       viewModel = ViewModelProvider(this).get(MainViewModel::class.java) // получение типа класса
 
@@ -53,12 +64,14 @@ class DetailFragment : Fragment() {
 // при изменении liveData будет изменяться этот метод
 // подписались на данные data: String
 //        viewModel.liveData.observe(viewLifecycleOwner){ state ->
-             renderData(state) }
+   //          renderData(state) }
         // кладем дату в текст по подписке
 
       //  viewModel.getWeatherFromLocalSource() // вызываем в нужный момент getWeather после подписки
     }
 
+
+/*
     private fun renderData(state: AppState) {
 
         when (state){
@@ -84,7 +97,7 @@ class DetailFragment : Fragment() {
         binding.button.setOnClickListener {
             viewModel.getData()
         }*/
-    }
+    }*/
 
 
     override fun onDestroyView() {

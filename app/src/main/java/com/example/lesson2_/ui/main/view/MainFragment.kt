@@ -10,6 +10,7 @@ import com.example.lesson2_.R
 import com.example.lesson2_.databinding.MainFragmentBinding
 import com.example.lesson2_.ui.main.viewModel.MainViewModel
 import com.example.lesson2_.ui.main.model.AppState
+import com.example.lesson2_.ui.main.model.Weather
 import com.google.android.material.snackbar.Snackbar
 
 class MainFragment : Fragment() {
@@ -43,6 +44,22 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         adapter = MainAdapter()
+        adapter.listener = object:MainAdapter.OnItemViewClickListner{
+            override fun onItemClick(weather: Weather) {
+                val manager = activity?.supportFragmentManager
+                if (manager != null){
+                    val bundle = Bundle()
+                    // создали бандл и положили в него погоду и передали во фрагмент
+                    bundle.putParcelable(DetailFragment.WEAHTER_EXTRA,weather)
+                    manager.beginTransaction()
+                        .replace(R.id.container,DetailFragment.newInstance(bundle))
+                        .addToBackStack("")
+                        .commit()
+                }
+            }
+
+        }
+
         binding.recyclerView.adapter = adapter
         binding.mainFragmentFAB.setOnClickListener {
             isRus = ! isRus // меняем метку флага
