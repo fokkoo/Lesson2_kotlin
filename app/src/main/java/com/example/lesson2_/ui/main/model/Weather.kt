@@ -1,10 +1,16 @@
 package com.example.lesson2_.ui.main.model
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+
+// @Parcelize создает методы при наличии в bield.gradel id 'kotlin-android-extensions'
+@Parcelize
 data class Weather (
     val city: City = getDefaultCity(),
     val temperature: Int = 0,
     val feelsLike: Int = 0
-        ){
+        ): Parcelable{
 
 
 }

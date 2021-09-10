@@ -7,29 +7,33 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.lesson2_.R
+import com.example.lesson2_.databinding.DetailFragmentBinding
 import com.example.lesson2_.databinding.MainFragmentBinding
 import com.example.lesson2_.ui.main.viewModel.MainViewModel
 import com.example.lesson2_.ui.main.model.AppState
+import com.example.lesson2_.ui.main.model.Weather
 import com.google.android.material.snackbar.Snackbar
 
 class DetailFragment : Fragment() {
 
     companion object {
+        const val WEAHTER_EXTRA = "WEAHTER_EXTRA"
+
         fun newInstance() = DetailFragment()
     }
 
-    private lateinit var viewModel: MainViewModel
 
-    private  var _binding: MainFragmentBinding? = null// создание объекта байндинг
+
+    private  var _binding: DetailFragmentBinding? = null// создание объекта байндинг
     private val binding get()= _binding!! // создание объекта байндинг
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val view = inflater.inflate(R.layout.main_fragment,container,false)
+        val view = inflater.inflate(R.layout.detail_fragment,container,false)
 
-        _binding = MainFragmentBinding.bind(view) // инициализация байдинга
+        _binding = DetailFragmentBinding.bind(view) // инициализация байдинга
 
         return binding.root
     }
@@ -37,12 +41,18 @@ class DetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java) // получение типа класса
+
+
+        val weather = arguments?.getParcelable<Weather>(WEAHTER_EXTRA)
+
+        if (weather != null){}
+
+ //       viewModel = ViewModelProvider(this).get(MainViewModel::class.java) // получение типа класса
 
 
 // при изменении liveData будет изменяться этот метод
 // подписались на данные data: String
-        viewModel.liveData.observe(viewLifecycleOwner){ state ->
+//        viewModel.liveData.observe(viewLifecycleOwner){ state ->
              renderData(state) }
         // кладем дату в текст по подписке
 
