@@ -18,6 +18,7 @@ import com.example.lesson2_.ui.main.model.City
 import com.example.lesson2_.ui.main.model.Weather
 import com.example.lesson2_.ui.main.model.WeatherDTO
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.detail_fragment.view.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.lang.Exception
@@ -58,14 +59,34 @@ class DetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        val weather = arguments?.getParcelable<Weather>(WEAHTER_EXTRA)
+        // ?.let проверка на null
+        arguments?.getParcelable<Weather>(WEAHTER_EXTRA)?.let { weather ->
 
-        if (weather != null) {
+            weather.city.also { city ->
+                binding.city.text =
+                    city.name // binding - объект который связывает айди макета с активити
+                binding.lat.text = city.lat.toString()
+                binding.lon.text = city.lon.toString()
 
-            binding.message.text =
-                "${weather.city.name}+ ${weather.city.lat}+${weather.city.lon}+${weather.temperature}"
+
+            }
+            with (binding){
+                temperature.text = weather.temperature.toString()
+            }
+
 
         }
+
+
+    //    if (weather != null) {
+     //       binding.city.text =
+    //            weather.city.name // binding - объект который связывает айди макета с активити
+    //        binding.lat.text = weather.city.lat.toString()
+
+    //        binding.message.text =
+     //           "${weather.city.name}+ ${weather.city.lat}+${weather.city.lon}+${weather.temperature}"
+
+     //   }
 
 
         //       viewModel = ViewModelProvider(this).get(MainViewModel::class.java) // получение типа класса
@@ -82,13 +103,16 @@ class DetailFragment : Fragment() {
 
 
     fun displayWeather(weather: WeatherDTO, city: City) {
-        city.also{city -> 
-            binding.cityName.text = city.name
-            binding.cityCoordinates.text = "${city.lat}-${city.lon}"
+        city.also { city ->
+            binding.city.text = city.name
+            binding.lat.text = city.lat.toString()
+            binding.lon.text = city.lon.toString()
+
+            //  binding.city.lat.text = "${city.lat}-${city.lon}"
         }
-        with(binding){
-            temperatureValue.text = weather.fact?.temp.toString()
-            feelslikeValue.text =  weather.fact?.feels_like.toString()
+        with (binding){
+            
+            temperature.text = weather.fact?.feels_like.toString()
         }
 
     }
