@@ -1,11 +1,14 @@
 package com.example.lesson2_.ui.main.view
 
+import android.os.Build
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import com.example.lesson2_.R
 import com.example.lesson2_.databinding.DetailFragmentBinding
 import com.example.lesson2_.databinding.MainFragmentBinding
@@ -13,6 +16,12 @@ import com.example.lesson2_.ui.main.viewModel.MainViewModel
 import com.example.lesson2_.ui.main.model.AppState
 import com.example.lesson2_.ui.main.model.Weather
 import com.google.android.material.snackbar.Snackbar
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.lang.Exception
+import java.net.URL
+import java.util.stream.Collectors
+import javax.net.ssl.HttpsURLConnection
 
 class DetailFragment : Fragment() {
 
@@ -21,7 +30,7 @@ class DetailFragment : Fragment() {
 
 
         // фабричный метод
-        fun newInstance(bundle: Bundle) : DetailFragment {
+        fun newInstance(bundle: Bundle): DetailFragment {
             val fragment = DetailFragment()
             fragment.arguments = bundle
             return fragment
@@ -29,15 +38,14 @@ class DetailFragment : Fragment() {
     }
 
 
-
-    private  var _binding: DetailFragmentBinding? = null// создание объекта байндинг
-    private val binding get()= _binding!! // создание объекта байндинг
+    private var _binding: DetailFragmentBinding? = null// создание объекта байндинг
+    private val binding get() = _binding!! // создание объекта байндинг
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val view = inflater.inflate(R.layout.detail_fragment,container,false)
+        val view = inflater.inflate(R.layout.detail_fragment, container, false)
 
         _binding = DetailFragmentBinding.bind(view) // инициализация байдинга
 
@@ -48,26 +56,26 @@ class DetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-
         val weather = arguments?.getParcelable<Weather>(WEAHTER_EXTRA)
 
-        if (weather != null){
+        if (weather != null) {
 
-            binding.message.text = "${weather.city.name}+ ${weather.city.lat}+${weather.city.lon}+${weather.temperature}"
+            binding.message.text =
+                "${weather.city.name}+ ${weather.city.lat}+${weather.city.lon}+${weather.temperature}"
 
         }
 
 
- //       viewModel = ViewModelProvider(this).get(MainViewModel::class.java) // получение типа класса
+        //       viewModel = ViewModelProvider(this).get(MainViewModel::class.java) // получение типа класса
 
 
 // при изменении liveData будет изменяться этот метод
 // подписались на данные data: String
 //        viewModel.liveData.observe(viewLifecycleOwner){ state ->
-   //          renderData(state) }
+        //          renderData(state) }
         // кладем дату в текст по подписке
 
-      //  viewModel.getWeatherFromLocalSource() // вызываем в нужный момент getWeather после подписки
+        //  viewModel.getWeatherFromLocalSource() // вызываем в нужный момент getWeather после подписки
     }
 
 
@@ -99,9 +107,41 @@ class DetailFragment : Fragment() {
         }*/
     }*/
 
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun goToInternet(uri: URL) {
+        var urlConnection: HttpsURLConnection? = null
+        try {
+            urlConnection = uri.openConnection() as HttpsURLConnection
+            urlConnection.apply {
+                requestMethod = "GET"
+                readTimeout = 10000
+            }
+
+
+            val reader = BufferedReader(InputStreamReader(urlConnection.inputStream))
+            val result = reader.lines().collect(Collectors.joining("\n"))
+
+           /* runOnUiThread {
+                binding.webview.loadDataWithBaseURL(
+                    null,
+                    result,
+                    "text/html;charset=utf-8",
+                    "utf-8",
+                    null
+                )
+            }*/
+        } catch (e: Exception) {
+            Log.e("", "FAILED", e)
+        } finally {
+            urlConnection?.disconnect()
+
+        }
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null // не соберется фрагмент , из за потери данных, из за сылок на элементы  тк фрагмент живет без отображения
+        _binding =
+            null // не соберется фрагмент , из за потери данных, из за сылок на элементы  тк фрагмент живет без отображения
     }
 }

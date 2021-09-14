@@ -35,7 +35,7 @@ class MainViewModel : ViewModel() {
         liveDataToObserve.value = AppState.Loading// как только дернули то первым начинаем загрузку
 
         Thread {
-            Thread.sleep(2000)
+            Thread.sleep(500)
             liveDataToObserve.postValue(
                 AppState.Success(
                     if (isRussian) {
