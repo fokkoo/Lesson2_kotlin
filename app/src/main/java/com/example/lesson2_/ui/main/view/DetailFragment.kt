@@ -18,6 +18,7 @@ import com.example.lesson2_.ui.main.model.City
 import com.example.lesson2_.ui.main.model.Weather
 import com.example.lesson2_.ui.main.model.WeatherDTO
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.detail_fragment.view.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -55,6 +56,7 @@ class DetailFragment : Fragment() {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -70,10 +72,17 @@ class DetailFragment : Fragment() {
 
 
             }
+
+            /*
             with (binding){
                 temperature.text = weather.temperature.toString()
-            }
+            }*/
 
+            Thread{
+                goToInternet(
+                    uri =  URL("https://api.weather.yandex.ru/v2/forecast?lat=${weather.city.lat}&lon=${weather.city.lon}&lang=ru_Ru")
+                )
+            }.start()
 
         }
 
@@ -99,10 +108,24 @@ class DetailFragment : Fragment() {
         // кладем дату в текст по подписке
 
         //  viewModel.getWeatherFromLocalSource() // вызываем в нужный момент getWeather после подписки
+
+
+
     }
 
 
-    fun displayWeather(weather: WeatherDTO, city: City) {
+    fun displayWeather(weather: WeatherDTO) {
+
+        with (binding){
+
+            temperature.text = weather.fact?.feels_like.toString()
+        }
+
+    }
+
+
+
+  /*  fun displayWeather(weather: WeatherDTO, city: City) {
         city.also { city ->
             binding.city.text = city.name
             binding.lat.text = city.lat.toString()
@@ -111,11 +134,11 @@ class DetailFragment : Fragment() {
             //  binding.city.lat.text = "${city.lat}-${city.lon}"
         }
         with (binding){
-            
+
             temperature.text = weather.fact?.feels_like.toString()
         }
 
-    }
+    }*/
 
 
 /*
@@ -154,21 +177,20 @@ class DetailFragment : Fragment() {
             urlConnection.apply {
                 requestMethod = "GET"
                 readTimeout = 10000
+                addRequestProperty("X-Yandex-API-Key", "d91d6016-b5ec-4179-8fc6-c5800d6f8c44") // передача ключа разработчика
             }
 
 
             val reader = BufferedReader(InputStreamReader(urlConnection.inputStream))
             val result = reader.lines().collect(Collectors.joining("\n"))
 
-            /* runOnUiThread {
-                 binding.webview.loadDataWithBaseURL(
-                     null,
-                     result,
-                     "text/html;charset=utf-8",
-                     "utf-8",
-                     null
-                 )
-             }*/
+
+
+            val weatherDTO: WeatherDTO = Gson().fromJson(result,WeatherDTO::class.java)  // магия преобразования джсона в джава объект
+
+             requireActivity().runOnUiThread {
+               displayWeather(weatherDTO)
+             }
         } catch (e: Exception) {
             Log.e("", "FAILED", e)
         } finally {
