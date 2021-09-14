@@ -4,7 +4,7 @@ package com.example.lesson2_.ui.main.model
 
 data class WeatherDTO(
     val fact: FactDTO?
-    
+
 ) {
 
     data class FactDTO(
