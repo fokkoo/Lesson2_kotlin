@@ -8,15 +8,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.example.lesson2_.R
 import com.example.lesson2_.databinding.DetailFragmentBinding
 import com.example.lesson2_.databinding.MainFragmentBinding
+import com.example.lesson2_.ui.main.model.*
 import com.example.lesson2_.ui.main.viewModel.MainViewModel
-import com.example.lesson2_.ui.main.model.AppState
-import com.example.lesson2_.ui.main.model.City
-import com.example.lesson2_.ui.main.model.Weather
-import com.example.lesson2_.ui.main.model.WeatherDTO
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.detail_fragment.view.*
@@ -78,11 +76,20 @@ class DetailFragment : Fragment() {
                 temperature.text = weather.temperature.toString()
             }*/
 
-            Thread{
-                goToInternet(
-                    uri =  URL("https://api.weather.yandex.ru/v2/forecast?lat=${weather.city.lat}&lon=${weather.city.lon}&lang=ru_Ru")
-                )
-            }.start()
+            WeatherLoader(
+                weather.city.lat,
+                weather.city.lon,
+                object : WeatherLoader.weatherLoaderListner{
+                    override fun onLoaded(weatherDTO: WeatherDTO) {
+                        displayWeather(weatherDTO)
+                    }
+
+                    override fun onFailed(throwable: Throwable) {
+                        Toast.makeText(requireContext(),throwable.localizedMessage,Toast.LENGTH_LONG).show()
+                    }
+                }
+
+            )
 
         }
 
@@ -168,36 +175,6 @@ class DetailFragment : Fragment() {
             viewModel.getData()
         }*/
     }*/
-
-    @RequiresApi(Build.VERSION_CODES.N)
-    private fun goToInternet(uri: URL) {
-        var urlConnection: HttpsURLConnection? = null
-        try {
-            urlConnection = uri.openConnection() as HttpsURLConnection
-            urlConnection.apply {
-                requestMethod = "GET"
-                readTimeout = 10000
-                addRequestProperty("X-Yandex-API-Key", "d91d6016-b5ec-4179-8fc6-c5800d6f8c44") // передача ключа разработчика
-            }
-
-
-            val reader = BufferedReader(InputStreamReader(urlConnection.inputStream))
-            val result = reader.lines().collect(Collectors.joining("\n"))
-
-
-
-            val weatherDTO: WeatherDTO = Gson().fromJson(result,WeatherDTO::class.java)  // магия преобразования джсона в джава объект
-
-             requireActivity().runOnUiThread {
-               displayWeather(weatherDTO)
-             }
-        } catch (e: Exception) {
-            Log.e("", "FAILED", e)
-        } finally {
-            urlConnection?.disconnect()
-
-        }
-    }
 
 
     override fun onDestroyView() {
