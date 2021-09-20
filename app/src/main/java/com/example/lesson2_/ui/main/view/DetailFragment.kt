@@ -81,15 +81,21 @@ class DetailFragment : Fragment() {
                 weather.city.lon,
                 object : WeatherLoader.weatherLoaderListner{
                     override fun onLoaded(weatherDTO: WeatherDTO) {
+                        requireActivity().runOnUiThread{
                         displayWeather(weatherDTO)
+                        }
                     }
 
                     override fun onFailed(throwable: Throwable) {
-                        Toast.makeText(requireContext(),throwable.localizedMessage,Toast.LENGTH_LONG).show()
+
+                        requireActivity().runOnUiThread{
+                            Toast.makeText(requireContext(),throwable.localizedMessage,Toast.LENGTH_LONG).show()
+                        }
+
                     }
                 }
 
-            )
+            ).goToInternet()
 
         }
 
