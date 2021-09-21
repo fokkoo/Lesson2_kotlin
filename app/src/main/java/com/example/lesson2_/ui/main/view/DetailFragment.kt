@@ -85,7 +85,7 @@ class DetailFragment : Fragment() {
                         displayWeather(weatherDTO)
                         }
                     }
-
+//
                     override fun onFailed(throwable: Throwable) {
 
                         requireActivity().runOnUiThread{
