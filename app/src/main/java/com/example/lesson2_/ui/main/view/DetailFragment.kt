@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.ViewModel
 import com.example.lesson2_.R
 import com.example.lesson2_.databinding.DetailFragmentBinding
 import com.example.lesson2_.databinding.MainFragmentBinding
@@ -126,8 +127,13 @@ class DetailFragment : Fragment() {
 
     }
 
+    private fun renderData(state:AppState){
+        
+    }
+
 
     fun displayWeather(weather: WeatherDTO) {
+
 
         with (binding){
 

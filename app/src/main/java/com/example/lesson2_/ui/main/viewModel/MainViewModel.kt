@@ -3,9 +3,10 @@ package com.example.lesson2_.ui.main.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.lesson2_.ui.main.model.AppState
-import com.example.lesson2_.ui.main.model.Repository
-import com.example.lesson2_.ui.main.model.RepositoryImpl
+import com.example.lesson2_.ui.main.model.*
+import com.example.lesson2_.ui.main.model.database.HistoryEntity
+import com.example.lesson2_.ui.main.view.App
+import java.util.*
 
 class MainViewModel : ViewModel() {
 
@@ -13,6 +14,8 @@ class MainViewModel : ViewModel() {
     private val liveDataToObserve: MutableLiveData<AppState> = MutableLiveData()
 
     private val repository: Repository = RepositoryImpl()
+
+    private val localRepository:LocalRepository = LocalRepositoryImpl(App.getHistoryDao())
 
     // Mutable значит можно положить туда данные postvalue setvalue view моделей, для активити не мутебл
 
@@ -51,4 +54,16 @@ class MainViewModel : ViewModel() {
         }.start()
     }
 
+    fun saveWeather(weather: Weather){
+        localRepository.saveEntity(
+            HistoryEntity(
+                id=0,
+                city= weather.city.name,
+                temerature = weather.temperature,
+                condition="Norm condition, to do",
+                timestamp = Date().time
+            )
+        )
+
+    }
 }
