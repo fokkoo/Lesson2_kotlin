@@ -37,6 +37,7 @@ class App: Application() {
                 ).allowMainThreadQueries()
                     .build()
                 //поменять allowMainThreadQueries() на отдельный поток
+                //
             }
             return db!!.historyDao()
         }
