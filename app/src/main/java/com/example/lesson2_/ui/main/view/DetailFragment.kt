@@ -78,12 +78,14 @@ class DetailFragment : Fragment() {
             }*/
 
             WeatherLoader(
+
                 weather.city.lat,
                 weather.city.lon,
                 object : WeatherLoader.weatherLoaderListner{
                     override fun onLoaded(weatherDTO: WeatherDTO) {
                         requireActivity().runOnUiThread{
                         displayWeather(weatherDTO)
+
                         }
                     }
 //
@@ -112,7 +114,7 @@ class DetailFragment : Fragment() {
      //   }
 
 
-        //       viewModel = ViewModelProvider(this).get(MainViewModel::class.java) // получение типа класса
+     //    viewModel =            ViewModelProvider(this).get(MainViewModel::class.java) // получение типа класса
 
 
 // при изменении liveData будет изменяться этот метод
@@ -127,9 +129,7 @@ class DetailFragment : Fragment() {
 
     }
 
-    private fun renderData(state:AppState){
-        
-    }
+
 
 
     fun displayWeather(weather: WeatherDTO) {

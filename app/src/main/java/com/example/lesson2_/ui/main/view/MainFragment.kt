@@ -95,6 +95,7 @@ class MainFragment : Fragment() {
                 binding.loadingLayout.visibility = View.GONE
                 adapter.weatherData = state.weather
 
+                viewModel.saveWeather(state.weather.first())
             }
             is AppState.Error -> {
                 binding.loadingLayout.visibility = View.GONE
