@@ -10,6 +10,7 @@ import com.example.lesson2_.R
 import com.example.lesson2_.databinding.DetailFragmentBinding
 import com.example.lesson2_.databinding.FragmentHistoryBinding
 import com.example.lesson2_.databinding.MainFragmentBinding
+import com.example.lesson2_.ui.main.viewModel.HistoryAdapter
 import com.example.lesson2_.ui.main.viewModel.HistoryViewModel
 
 
@@ -22,6 +23,7 @@ class HistoryFragment : Fragment() {
 
     private var _binding: FragmentHistoryBinding? = null// создание объекта байндинг
     private val binding get() = _binding!! // создание объекта байндинг
+    private val adapter: HistoryAdapter by lazy{HistoryAdapter()}
 
 
     override fun onCreateView(
@@ -35,6 +37,13 @@ class HistoryFragment : Fragment() {
 
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.recyclerview.adapter = adapter
+        adapter.setData(viewModel.getAllHistory())
+
     }
 
     override fun onDestroyView() {
