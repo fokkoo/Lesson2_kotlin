@@ -3,6 +3,7 @@ package com.example.lesson2_.ui.main.view
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import com.example.lesson2_.R
 import com.example.lesson2_.databinding.MainActivityBinding
 
@@ -25,8 +26,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.main_screen_manu,menu)
+        menuInflater.inflate(R.menu.main_menu,menu)
         return super.onCreateOptionsMenu(menu)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId){
+            R.id.idHistory ->{
+                supportFragmentManager.apply {
+                    beginTransaction()
+                        .add(R.id.container,HistoryFragment())
+                        .addToBackStack("")
+                        .commitAllowingStateLoss()
+                }
+                true
+            }
+            else ->super.onOptionsItemSelected(item)
+        }
+
+
+    }
 }
