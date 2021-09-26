@@ -19,7 +19,7 @@ class WeatherLoader (
     @RequiresApi(Build.VERSION_CODES.N)
      fun goToInternet() {
         Thread{
-            val uri = URL("https://api.weather.yandex.ru/v2/forecast?lat=${lat}&lon=${lon}&lang=ru_Ru")
+            val uri = URL("https://api.weather.yandex.ru/v2/informers?lat=${lat}&lon=${lon}&lang=ru_Ru")
             var urlConnection: HttpsURLConnection? = null
             try {
                 urlConnection = uri.openConnection()as HttpsURLConnection
