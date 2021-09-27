@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.lesson2_.R
 import com.example.lesson2_.ui.main.model.database.HistoryEntity
 import kotlinx.android.synthetic.main.history_item.view.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 class HistoryAdapter :RecyclerView.Adapter<HistoryAdapter.RecyclerItemViewHolder>(){
     private var data: List<HistoryEntity> = arrayListOf()
@@ -40,6 +42,8 @@ class HistoryAdapter :RecyclerView.Adapter<HistoryAdapter.RecyclerItemViewHolder
                     _id.text = data.id.toString()
                     city.text = data.city
                     temperature.text = data.temerature.toString()
+                    date.text = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date(data.timestamp))
+
                 }
             }
 

@@ -1,28 +1,18 @@
 package com.example.lesson2_.ui.main.view
 
 import android.os.Build
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.lifecycle.ViewModel
 import com.example.lesson2_.R
 import com.example.lesson2_.databinding.DetailFragmentBinding
-import com.example.lesson2_.databinding.MainFragmentBinding
 import com.example.lesson2_.ui.main.model.*
-import com.example.lesson2_.ui.main.viewModel.MainViewModel
-import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
-import kotlinx.android.synthetic.main.detail_fragment.view.*
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.lang.Exception
-import java.net.URL
+import kotlinx.android.synthetic.main.history_item.*
+import kotlinx.android.synthetic.main.main_fragment_item.*
 import java.util.stream.Collectors
 import javax.net.ssl.HttpsURLConnection
 
@@ -134,8 +124,9 @@ class DetailFragment : Fragment() {
 
     fun displayWeather(weather: WeatherDTO) {
 
-
+        binding.city.text = city.text
         with (binding){
+
 
             temperature.text = weather.fact?.feels_like.toString()
         }

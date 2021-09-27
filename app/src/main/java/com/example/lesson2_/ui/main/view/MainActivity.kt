@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
             R.id.idHistory ->{
                 supportFragmentManager.apply {
                     beginTransaction()
-                        .add(R.id.container,HistoryFragment())
+                        .replace(R.id.container,HistoryFragment())
                         .addToBackStack("")
                         .commitAllowingStateLoss()
                 }
