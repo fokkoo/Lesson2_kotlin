@@ -54,12 +54,9 @@ class DetailFragment : Fragment() {
         arguments?.getParcelable<Weather>(WEAHTER_EXTRA)?.let { weather ->
 
             weather.city.also { city ->
-                binding.city.text =
-                    city.name // binding - объект который связывает айди макета с активити
+                binding.city.text =city.name // binding - объект который связывает айди макета с активити
                 binding.lat.text = city.lat.toString()
                 binding.lon.text = city.lon.toString()
-
-
             }
 
             /*
@@ -124,7 +121,8 @@ class DetailFragment : Fragment() {
 
     fun displayWeather(weather: WeatherDTO) {
 
-        binding.city.text = city.text
+      //  binding.city.text = city.name //delite
+
         with (binding){
 
 

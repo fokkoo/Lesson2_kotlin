@@ -1,11 +1,14 @@
 package com.example.lesson2_.ui.main.view
 
+import android.database.Cursor
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.view.Menu
 import android.view.MenuItem
 import com.example.lesson2_.R
 import com.example.lesson2_.databinding.MainActivityBinding
+import kotlin.time.measureTimedValue
 
 class MainActivity : AppCompatActivity() {
 
@@ -41,9 +44,39 @@ class MainActivity : AppCompatActivity() {
                 }
                 true
             }
+
+            // обработка нажатия кнопки запроса контактов и вызов соответствующего метода
+            R.id.getContacts ->{
+                getContact()
+                true
+            }
+
+
             else ->super.onOptionsItemSelected(item)
+
+
+
+
         }
 
 
     }
+
+    private fun getContact() {
+        // обращение к контент провайдеру контактов
+            contentResolver
+        // обращение к курсору по элементного считывания контактов
+        val cursor: Cursor?=contentResolver.query(
+            ContactsContract.Contacts.CONTENT_URI,
+            null,
+            null,
+            null,
+            ContactsContract.Contacts.DISPLAY_NAME+" ASC"
+        )
+        cursor?.let{
+            
+        }
+    }
+
+
 }
