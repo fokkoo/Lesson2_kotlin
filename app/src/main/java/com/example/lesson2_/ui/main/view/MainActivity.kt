@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.provider.ContactsContract
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AlertDialog
 import com.example.lesson2_.R
 import com.example.lesson2_.databinding.MainActivityBinding
 import kotlin.time.measureTimedValue
@@ -73,9 +74,27 @@ class MainActivity : AppCompatActivity() {
             null,
             ContactsContract.Contacts.DISPLAY_NAME+" ASC"
         )
-        cursor?.let{
-            
+
+        val contacts = mutableListOf<String>()
+
+        cursor?.let{ cursor ->
+            for (i in 0..cursor.count) {
+                // Переходим на позицию в Cursor
+                if (cursor.moveToPosition(i)) {
+                    // Берём из Cursor столбец с именем
+                    val name =
+                        cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
+
+                    // складываем имена в массив
+                    contacts.add(name)
+                }
+            }
+
         }
+        AlertDialog.Builder(this)
+            .setItems(contacts.toTypedArray(), {d,w->})
+            .setCancelable(true)
+            .show()
     }
 
 
