@@ -1,17 +1,33 @@
 package com.example.lesson2_.ui.main.view
 
+import android.Manifest
 import android.database.Cursor
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import com.example.lesson2_.R
 import com.example.lesson2_.databinding.MainActivityBinding
+
 import kotlin.time.measureTimedValue
 
 class MainActivity : AppCompatActivity() {
+
+
+    // запрос разрешения на контакты и реакция на запрос
+    private val permissionResult = registerForActivityResult(ActivityResultContracts.RequestPermission()){result->
+        if (result){
+            getContact()
+            //granded
+        }else{
+            Toast.makeText(this,"no permition", Toast.LENGTH_LONG).show()
+            //denied
+        }
+    }
 
     private lateinit var binding: MainActivityBinding
 
@@ -48,7 +64,8 @@ class MainActivity : AppCompatActivity() {
 
             // обработка нажатия кнопки запроса контактов и вызов соответствующего метода
             R.id.getContacts ->{
-                getContact()
+                permissionResult.launch(Manifest.permission.READ_CONTACTS)
+
                 true
             }
 
