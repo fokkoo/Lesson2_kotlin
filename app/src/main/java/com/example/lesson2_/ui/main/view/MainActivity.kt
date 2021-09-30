@@ -59,6 +59,7 @@ class MainActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId){
             R.id.idHistory ->{
@@ -99,20 +100,29 @@ class MainActivity : AppCompatActivity() {
             null,
             null,
             ContactsContract.Contacts.DISPLAY_NAME+" ASC"
+
         )
 
+
+
         val contacts = mutableListOf<String>()
+        val contactsNumb = mutableListOf<String>()
 
         cursor?.let{ cursor ->
             for (i in 0..cursor.count) {
                 // Переходим на позицию в Cursor
                 if (cursor.moveToPosition(i)) {
                     // Берём из Cursor столбец с именем
-                    val name =
-                        cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
-
+                    val name =  cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
+                   // val name =  cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.SEARCH_PHONE_NUMBER_KEY))
+                 //  val telephoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
                     // складываем имена в массив
                     contacts.add(name)
+                  //  contacts.add(telephoneNumber)
+                 //   contactsNumb.add(telephoneNumber)
+
+                    // складываем телефоны в массив
+                //    contactsNumb.add(telephoneNumber.toString())
                 }
             }
 
