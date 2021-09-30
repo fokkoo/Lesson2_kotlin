@@ -2,6 +2,7 @@ package com.example.lesson2_.ui.main.view
 
 import android.Manifest
 import android.database.Cursor
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.ContactsContract
@@ -9,6 +10,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import com.example.lesson2_.R
 import com.example.lesson2_.databinding.MainActivityBinding
@@ -19,14 +21,21 @@ class MainActivity : AppCompatActivity() {
 
 
     // запрос разрешения на контакты и реакция на запрос
-    private val permissionResult = registerForActivityResult(ActivityResultContracts.RequestPermission()){result->
-        if (result){
-            getContact()
-            //granded
-        }else{
-            Toast.makeText(this,"no permition", Toast.LENGTH_LONG).show()
-            //denied
-        }
+    @RequiresApi(Build.VERSION_CODES.M)
+    private val permissionResult = registerForActivityResult(ActivityResultContracts.RequestPermission()){ result->
+    when {
+                //granded
+                result->  getContact()
+
+                // метод, который отслеживает галку пользователя о запрете повторного показа предложения
+                !shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS)->{
+                    Toast.makeText(this,"Go to app settings and give permission", Toast.LENGTH_LONG).show()
+                }
+                //denied
+                else -> Toast.makeText(this,"no permition", Toast.LENGTH_LONG).show()
+            }
+
+
     }
 
     private lateinit var binding: MainActivityBinding
