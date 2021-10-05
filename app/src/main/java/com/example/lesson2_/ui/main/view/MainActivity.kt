@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.database.Cursor
+import android.location.Geocoder
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
@@ -19,6 +20,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import com.example.lesson2_.R
 import com.example.lesson2_.databinding.MainActivityBinding
+import java.io.IOException
 
 import kotlin.time.measureTimedValue
 
@@ -104,12 +106,43 @@ class MainActivity : AppCompatActivity() {
                 )
             }
         } else{
-            
+            // получаем последнюю известную координату пользователя здесь продолжить добавлять проверки по вайфай и др условия
+                val location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+
+            if (location == null){
+                // give massege to user - no GPS
+            } else {
+                getAddressByLocation(location)
+            }
         }
     }
 
     private fun getAddressByLocation(location: Location) {
+        val geocoder = Geocoder(this) // геокодер предоставляет координаты, но ходит в интернет, поэтому идет в отдельном потоке
+        Thread{
+            try {
+                val address = geocoder.getFromLocation(
+                    location.latitude,
+                    location.longitude,
+                       1
+                )
 
+// передаем через пост потому как мы находимся в неосновном потоке
+                binding.container.post {
+                  //  binding.container.showSbackBar(address[0].getAddressLine(0))
+                    AlertDialog.Builder(this).setMessage(address[0].getAddressLine(0))
+                        .setCancelable(true)
+                        .show()
+                }
+
+
+
+
+
+            }catch(e:IOException){
+                e.printStackTrace()
+            }
+        }.start()
     }
 
 
