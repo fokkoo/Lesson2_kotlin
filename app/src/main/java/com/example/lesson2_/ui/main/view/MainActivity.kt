@@ -101,7 +101,13 @@ class MainActivity : AppCompatActivity() {
                          // метод устарел, поэтому его нужно вырезать. Это подводный камень новичка   super.onStatusChanged(provider, status, extras)
                         }
 
+                        override fun onProviderEnabled(provider: String) {
+                            // метод устарел, поэтому его нужно вырезать.  super.onProviderEnabled(provider)
+                        }
 
+                        override fun onProviderDisabled(provider: String) {
+                            // метод устарел, поэтому его нужно вырезать.  super.onProviderDisabled(provider)
+                        }
                     }
                 )
             }
@@ -192,7 +198,17 @@ class MainActivity : AppCompatActivity() {
 
                 true
             }
+            // обработка нажатия кнопки show Map
+            R.id.showMap -> {
+               supportFragmentManager.apply {
+                   beginTransaction()
+                       .add(R.id.container,MapsFragment())
+                       .addToBackStack("")
+                       .commitAllowingStateLoss()
+               }
 
+                true
+            }
             else -> super.onOptionsItemSelected(item)
 
 

@@ -26,4 +26,11 @@
         app:showAsAction="always"
 
         />
+    <item
+        android:id="@+id/showMap"
+        android:icon="@drawable/ic_baseline_map_24"
+        android:title="Show Google Map"
+        app:showAsAction="always"
+
+        />
 </menu>
