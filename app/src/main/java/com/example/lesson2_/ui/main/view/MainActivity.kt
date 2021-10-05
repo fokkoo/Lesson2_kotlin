@@ -1,7 +1,12 @@
 package com.example.lesson2_.ui.main.view
 
 import android.Manifest
+import android.annotation.SuppressLint
+import android.content.Context
 import android.database.Cursor
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -17,26 +22,96 @@ import com.example.lesson2_.databinding.MainActivityBinding
 
 import kotlin.time.measureTimedValue
 
+private const val REFRESH_PERIOD = 60000L // частота запроса координат
+private const val MINIMAL_DISTANCE = 100f // минимальный шаг пользователя
+
 class MainActivity : AppCompatActivity() {
 
 
     // запрос разрешения на контакты и реакция на запрос
     @RequiresApi(Build.VERSION_CODES.M)
-    private val permissionResult = registerForActivityResult(ActivityResultContracts.RequestPermission()){ result->
-    when {
+    private val permissionResult =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { result ->
+            when {
                 //granded
-                result->  getContact()
+                result -> getContact()
 
                 // метод, который отслеживает галку пользователя о запрете повторного показа предложения
-                !shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS)->{
-                    Toast.makeText(this,"Go to app settings and give permission", Toast.LENGTH_LONG).show()
+                !shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS) -> {
+                    Toast.makeText(
+                        this,
+                        "Go to app settings and give permission",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
                 //denied
-                else -> Toast.makeText(this,"no permition", Toast.LENGTH_LONG).show()
+                else -> Toast.makeText(this, "no permition", Toast.LENGTH_LONG).show()
             }
 
 
+        }
+
+    // запрос разрешения на геолокацию и реакция на запрос
+    @RequiresApi(Build.VERSION_CODES.M)
+    private val permissionGeoResult =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { result ->
+            when {
+                //granded
+                result -> getLocation()
+
+                // метод, который отслеживает галку пользователя о запрете повторного показа предложения
+                !shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> {
+                    Toast.makeText(
+                        this,
+                        "Go to app settings and give permission",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+                //denied
+                else -> Toast.makeText(this, "no permition", Toast.LENGTH_LONG).show()
+            }
+
+
+        }
+
+    @SuppressLint("MissingPermission")
+    private fun getLocation() {
+        val locationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+// проверяем включен ли GPS
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            // запрос точных данных в GPS_PROVIDER/ let - внутри не будет nullble
+            locationManager.getProvider(LocationManager.GPS_PROVIDER)?.let {
+                locationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER,
+                    REFRESH_PERIOD,
+                    MINIMAL_DISTANCE,
+                    object: LocationListener{
+                        override fun onLocationChanged(location: Location) {
+                            getAddressByLocation(location)
+                        }
+
+                        override fun onStatusChanged(
+                            provider: String?,
+                            status: Int,
+                            extras: Bundle?
+                        ) {
+                         // метод устарел, поэтому его нужно вырезать. Это подводный камень новичка   super.onStatusChanged(provider, status, extras)
+                        }
+
+
+                    }
+                )
+            }
+        } else{
+            
+        }
     }
+
+    private fun getAddressByLocation(location: Location) {
+
+    }
+
 
     private lateinit var binding: MainActivityBinding
 
@@ -49,23 +124,23 @@ class MainActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, MainFragment.newInstance())
-                    .commitNow()
+                .replace(R.id.container, MainFragment.newInstance())
+                .commitNow()
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.main_menu,menu)
+        menuInflater.inflate(R.menu.main_menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId){
-            R.id.idHistory ->{
+        return when (item.itemId) {
+            R.id.idHistory -> {
                 supportFragmentManager.apply {
                     beginTransaction()
-                        .replace(R.id.container,HistoryFragment())
+                        .replace(R.id.container, HistoryFragment())
                         .addToBackStack("")
                         .commitAllowingStateLoss()
                 }
@@ -73,16 +148,19 @@ class MainActivity : AppCompatActivity() {
             }
 
             // обработка нажатия кнопки запроса контактов и вызов соответствующего метода
-            R.id.getContacts ->{
+            R.id.getContacts -> {
                 permissionResult.launch(Manifest.permission.READ_CONTACTS)
 
                 true
             }
+            // обработка нажатия кнопки запроса контактов и вызов соответствующего метода
+            R.id.getLocation -> {
+                permissionGeoResult.launch(Manifest.permission.ACCESS_FINE_LOCATION)
 
+                true
+            }
 
-            else ->super.onOptionsItemSelected(item)
-
-
+            else -> super.onOptionsItemSelected(item)
 
 
         }
@@ -92,43 +170,43 @@ class MainActivity : AppCompatActivity() {
 
     private fun getContact() {
         // обращение к контент провайдеру контактов
-            contentResolver
+        contentResolver
         // обращение к курсору по элементного считывания контактов
-        val cursor: Cursor?=contentResolver.query(
+        val cursor: Cursor? = contentResolver.query(
             ContactsContract.Contacts.CONTENT_URI,
             null,
             null,
             null,
-            ContactsContract.Contacts.DISPLAY_NAME+" ASC"
+            ContactsContract.Contacts.DISPLAY_NAME + " ASC"
 
         )
-
 
 
         val contacts = mutableListOf<String>()
         val contactsNumb = mutableListOf<String>()
 
-        cursor?.let{ cursor ->
+        cursor?.let { cursor ->
             for (i in 0..cursor.count) {
                 // Переходим на позицию в Cursor
                 if (cursor.moveToPosition(i)) {
                     // Берём из Cursor столбец с именем
-                    val name =  cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
-                   // val name =  cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.SEARCH_PHONE_NUMBER_KEY))
-                 //  val telephoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
+                    val name =
+                        cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
+                    // val name =  cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.SEARCH_PHONE_NUMBER_KEY))
+                    //  val telephoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
                     // складываем имена в массив
                     contacts.add(name)
-                  //  contacts.add(telephoneNumber)
-                 //   contactsNumb.add(telephoneNumber)
+                    //  contacts.add(telephoneNumber)
+                    //   contactsNumb.add(telephoneNumber)
 
                     // складываем телефоны в массив
-                //    contactsNumb.add(telephoneNumber.toString())
+                    //    contactsNumb.add(telephoneNumber.toString())
                 }
             }
 
         }
         AlertDialog.Builder(this)
-            .setItems(contacts.toTypedArray(), {d,w->})
+            .setItems(contacts.toTypedArray(), { d, w -> })
             .setCancelable(true)
             .show()
     }
