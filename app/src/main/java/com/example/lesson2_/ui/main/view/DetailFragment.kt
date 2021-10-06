@@ -50,6 +50,17 @@ class DetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
+        val myWeatherFragmentArgument = arguments?.getParcelable<Weather>(DetailFragment.WEAHTER_EXTRA)
+        if(myWeatherFragmentArgument != null) {
+            var newLat1 = myWeatherFragmentArgument.city.lat
+            var newLong1 = myWeatherFragmentArgument.city.lon
+
+
+        }
+
+
+
+
         // ?.let проверка на null
         arguments?.getParcelable<Weather>(WEAHTER_EXTRA)?.let { weather ->
 
