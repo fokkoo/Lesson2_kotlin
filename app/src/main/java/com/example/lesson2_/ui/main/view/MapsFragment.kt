@@ -37,6 +37,7 @@ class MapsFragment : Fragment() {
 
     private val callback = OnMapReadyCallback { googleMap ->
 
+       // compa
 
         val myWeatherFragmentArgument = arguments?.getParcelable<Weather>(MapsFragment.WEAHTER_EXTRA)
         if(myWeatherFragmentArgument != null) {

@@ -2,6 +2,7 @@ package com.example.lesson2_.ui.main.view
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.database.Cursor
 import android.location.Geocoder
@@ -18,8 +19,11 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.LiveData
 import com.example.lesson2_.R
 import com.example.lesson2_.databinding.MainActivityBinding
+import com.example.lesson2_.ui.main.model.AppState
+import kotlinx.android.synthetic.main.history_item.*
 import java.io.IOException
 
 import kotlin.time.measureTimedValue
@@ -217,6 +221,8 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+   // val liveData: LiveData<AppState> = contactsLiveData
+
     private fun getContact() {
         // обращение к контент провайдеру контактов
         contentResolver
@@ -230,6 +236,8 @@ class MainActivity : AppCompatActivity() {
 
         )
 
+      //  contactsLiveData.value = AppState.Loading
+        val contentResolver = contentResolver
 
         val contacts = mutableListOf<String>()
         val contactsNumb = mutableListOf<String>()
@@ -241,7 +249,28 @@ class MainActivity : AppCompatActivity() {
                     // Берём из Cursor столбец с именем
                     val name =
                         cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
-                    // val name =  cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.SEARCH_PHONE_NUMBER_KEY))
+                    val id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID))
+                    var phoneNumber: String? = null
+
+                    if (cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)).toInt()>0){
+
+                        val phoneCursor = contentResolver.query(
+                            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                            null,
+                            "${ContactsContract.CommonDataKinds.Phone.CONTACT_ID}=?",
+                            arrayOf(),
+                            null
+                        )
+                        phoneCursor?.let {
+                            if (it.moveToFirst()){
+                                phoneNumber = it.getString(it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+                                it.close()
+                            }
+                        }
+                    }
+
+                //    phoneNumber?.let{contacts.add(PhonebookContact(name,it))}
+
                     //  val telephoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
                     // складываем имена в массив
                     contacts.add(name)
