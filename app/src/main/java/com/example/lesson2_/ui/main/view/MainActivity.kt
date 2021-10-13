@@ -239,6 +239,8 @@ class MainActivity : AppCompatActivity() {
       //  contactsLiveData.value = AppState.Loading
         val contentResolver = contentResolver
 
+
+
         val contacts = mutableListOf<String>()
         val contactsNumb = mutableListOf<String>()
 
@@ -249,8 +251,13 @@ class MainActivity : AppCompatActivity() {
                     // Берём из Cursor столбец с именем
                     val name =
                         cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
+
+                    val testValueMy = "true"
+
                     val id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID))
+
                     var phoneNumber: String? = null
+                  //  var phoneNumber: String? = "true"
 
                     if (cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)).toInt()>0){
 
@@ -258,22 +265,29 @@ class MainActivity : AppCompatActivity() {
                             ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                             null,
                             "${ContactsContract.CommonDataKinds.Phone.CONTACT_ID}=?",
-                            arrayOf(),
+                            arrayOf(id),
                             null
                         )
                         phoneCursor?.let {
-                            if (it.moveToFirst()){
+                           if (it.moveToNext()){
                                 phoneNumber = it.getString(it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
-                                it.close()
+                               it.close()
+
                             }
                         }
                     }
 
-                //    phoneNumber?.let{contacts.add(PhonebookContact(name,it))}
+                 //  phoneNumber?.let{contacts.add(PhonebookContact(name,it))}
 
                     //  val telephoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
                     // складываем имена в массив
-                    contacts.add(name)
+                    name ?.let { contacts.add(it) }
+                   phoneNumber?.let { contacts.add(it) }
+
+                    id?.let { contacts.add(it) }
+                  //  contacts.add(phoneNumber)
+
+
                     //  contacts.add(telephoneNumber)
                     //   contactsNumb.add(telephoneNumber)
 
