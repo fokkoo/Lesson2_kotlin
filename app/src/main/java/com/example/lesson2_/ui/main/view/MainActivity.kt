@@ -92,7 +92,7 @@ class MainActivity : AppCompatActivity() {
                     LocationManager.GPS_PROVIDER,
                     REFRESH_PERIOD,
                     MINIMAL_DISTANCE,
-                    object: LocationListener{
+                    object : LocationListener {
                         override fun onLocationChanged(location: Location) {
                             getAddressByLocation(location)
                         }
@@ -102,7 +102,7 @@ class MainActivity : AppCompatActivity() {
                             status: Int,
                             extras: Bundle?
                         ) {
-                         // метод устарел, поэтому его нужно вырезать. Это подводный камень новичка   super.onStatusChanged(provider, status, extras)
+                            // метод устарел, поэтому его нужно вырезать. Это подводный камень новичка   super.onStatusChanged(provider, status, extras)
                         }
 
                         override fun onProviderEnabled(provider: String) {
@@ -115,11 +115,11 @@ class MainActivity : AppCompatActivity() {
                     }
                 )
             }
-        } else{
+        } else {
             // получаем последнюю известную координату пользователя здесь продолжить добавлять проверки по вайфай и др условия
-                val location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+            val location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
 
-            if (location == null){
+            if (location == null) {
                 // give massege to user - no GPS
             } else {
                 getAddressByLocation(location)
@@ -128,28 +128,26 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getAddressByLocation(location: Location) {
-        val geocoder = Geocoder(this) // геокодер предоставляет координаты, но ходит в интернет, поэтому идет в отдельном потоке
-        Thread{
+        val geocoder =
+            Geocoder(this) // геокодер предоставляет координаты, но ходит в интернет, поэтому идет в отдельном потоке
+        Thread {
             try {
                 val address = geocoder.getFromLocation(
                     location.latitude,
                     location.longitude,
-                       1
+                    1
                 )
 
 // передаем через пост потому как мы находимся в неосновном потоке
                 binding.container.post {
-                  //  binding.container.showSbackBar(address[0].getAddressLine(0))
+                    //  binding.container.showSbackBar(address[0].getAddressLine(0))
                     AlertDialog.Builder(this).setMessage(address[0].getAddressLine(0))
                         .setCancelable(true)
                         .show()
                 }
 
 
-
-
-
-            }catch(e:IOException){
+            } catch (e: IOException) {
                 e.printStackTrace()
             }
         }.start()
@@ -204,12 +202,12 @@ class MainActivity : AppCompatActivity() {
             }
             // обработка нажатия кнопки show Map
             R.id.showMap -> {
-               supportFragmentManager.apply {
-                   beginTransaction()
-                       .add(R.id.container,MapsFragment())
-                       .addToBackStack("")
-                       .commitAllowingStateLoss()
-               }
+                supportFragmentManager.apply {
+                    beginTransaction()
+                        .add(R.id.container, MapsFragment())
+                        .addToBackStack("")
+                        .commitAllowingStateLoss()
+                }
 
                 true
             }
@@ -221,7 +219,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-   // val liveData: LiveData<AppState> = contactsLiveData
+    // val liveData: LiveData<AppState> = contactsLiveData
 
     private fun getContact() {
         // обращение к контент провайдеру контактов
@@ -236,9 +234,8 @@ class MainActivity : AppCompatActivity() {
 
         )
 
-      //  contactsLiveData.value = AppState.Loading
+        //  contactsLiveData.value = AppState.Loading
         val contentResolver = contentResolver
-
 
 
         val contacts = mutableListOf<String>()
@@ -257,9 +254,11 @@ class MainActivity : AppCompatActivity() {
                     val id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID))
 
                     var phoneNumber: String? = null
-                  //  var phoneNumber: String? = "true"
+                    //  var phoneNumber: String? = "true"
 
-                    if (cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)).toInt()>0){
+                    if (cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))
+                            .toInt() > 0
+                    ) {
 
                         val phoneCursor = contentResolver.query(
                             ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
@@ -268,24 +267,24 @@ class MainActivity : AppCompatActivity() {
                             arrayOf(id),
                             null
                         )
+
                         phoneCursor?.let {
-                           if (it.moveToNext()){
-                                phoneNumber = it.getString(it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
-                               it.close()
+                            if (it.moveToNext()) {
+                                phoneNumber =
+                                    it.getString(it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+                                it.close()
 
                             }
                         }
                     }
 
-                 //  phoneNumber?.let{contacts.add(PhonebookContact(name,it))}
-
-                    //  val telephoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
+                
                     // складываем имена в массив
-                    name ?.let { contacts.add(it) }
-                   phoneNumber?.let { contacts.add(it) }
+                    name?.let { contacts.add(it) }
+                    phoneNumber?.let { contacts.add(it) }
 
                     id?.let { contacts.add(it) }
-                  //  contacts.add(phoneNumber)
+                    //  contacts.add(phoneNumber)
 
 
                     //  contacts.add(telephoneNumber)
