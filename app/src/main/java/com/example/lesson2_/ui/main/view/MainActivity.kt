@@ -278,7 +278,7 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
 
-                
+                // comment
                     // складываем имена в массив
                     name?.let { contacts.add(it) }
                     phoneNumber?.let { contacts.add(it) }
