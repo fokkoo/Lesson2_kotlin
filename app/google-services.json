@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "215415025413",
+    "project_id": "weathergblesson",
+    "storage_bucket": "weathergblesson.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:215415025413:android:8e90800672efb52d3b516c",
+        "android_client_info": {
+          "package_name": "com.example.lesson2_"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "215415025413-d3gehtb2h6l5cc6s4noqft0nuuol79mj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkschpoN2LAR66Ql-JMmBlfuDTyJNUess"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "215415025413-d3gehtb2h6l5cc6s4noqft0nuuol79mj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
