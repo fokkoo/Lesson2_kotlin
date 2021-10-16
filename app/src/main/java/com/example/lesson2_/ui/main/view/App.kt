@@ -1,9 +1,11 @@
 package com.example.lesson2_.ui.main.view
 
 import android.app.Application
+import android.util.Log
 import androidx.room.Room
 import com.example.lesson2_.ui.main.model.database.HistoryDao
 import com.example.lesson2_.ui.main.model.database.HistoryDataBase
+import com.google.firebase.messaging.FirebaseMessaging
 import java.lang.IllegalStateException
 
 
@@ -14,6 +16,14 @@ class App: Application() {
         super.onCreate()
         // приложение сложили в переменную и можем обратиться
         appInstance = this
+
+        FirebaseMessaging.getInstance().token.addOnCompleteListener {task->
+            if(task.isSuccessful){
+                task.result.toString()
+                Log.d("MyFMessagingService","token=${task.result.toString()}")
+            }
+
+        }
     }
 
     companion object{
