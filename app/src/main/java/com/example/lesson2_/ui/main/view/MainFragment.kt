@@ -92,6 +92,8 @@ class MainFragment : Fragment() {
         when (state) {
             is AppState.Loading -> binding.loadingLayout.visibility = View.VISIBLE
             is AppState.Success -> {
+
+
                 binding.loadingLayout.visibility = View.GONE
                 adapter.weatherData = state.weather
 

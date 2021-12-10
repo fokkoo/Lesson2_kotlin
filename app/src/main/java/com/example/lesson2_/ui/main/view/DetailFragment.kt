@@ -8,9 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import coil.load
 import com.example.lesson2_.R
 import com.example.lesson2_.databinding.DetailFragmentBinding
 import com.example.lesson2_.ui.main.model.*
+import kotlinx.android.synthetic.main.fragment_history.*
 import kotlinx.android.synthetic.main.history_item.*
 import kotlinx.android.synthetic.main.main_fragment_item.*
 import java.util.stream.Collectors
@@ -59,7 +61,7 @@ class DetailFragment : Fragment() {
         }
 
 
-
+         binding.imageView.load("https://freepngimg.com/thumb/city/36275-3-city-hd.png")
 
         // ?.let проверка на null
         arguments?.getParcelable<Weather>(WEAHTER_EXTRA)?.let { weather ->
@@ -136,7 +138,7 @@ class DetailFragment : Fragment() {
 
         with (binding){
 
-
+          //
             temperature.text = weather.fact?.feels_like.toString()
         }
 

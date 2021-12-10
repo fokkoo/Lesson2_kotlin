@@ -54,6 +54,9 @@
             android:text=""
             tools:text="temperature_Погода"
             />
+
+
+
         <TextView
             android:id="@+id/feelsLike"
             android:layout_width="wrap_content"
@@ -63,6 +66,13 @@
             tools:text="feelsLike_Погода"
             />
 
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            tools:srcCompat="@drawable/ic_launcher_background"
+            app:srcCompat="@drawable/ic_launcher_background"/>
 
     </LinearLayout>
 
@@ -72,7 +82,7 @@
         android:layout_height="match_parent"
         android:background="@color/white"
         android:visibility="gone"
-        tools:visibility="visible">
+        tools:visibility="invisible">
 
 
         <ProgressBar
@@ -80,6 +90,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center" />
+
+
 
 
     </FrameLayout>
